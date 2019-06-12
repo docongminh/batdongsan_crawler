@@ -6,7 +6,18 @@ class QuotesSpider(scrapy.Spider):
 
     def start_requests(self):
         urls = [
-            'https://batdongsan.com.vn/nha-dat-ban',
+            #'https://batdongsan.com.vn/nha-dat-ban',
+            'https://batdongsan.com.vn/ban-can-ho-chung-cu',
+            'https://batdongsan.com.vn/ban-nha-rieng',
+            'https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke',
+            'https://batdongsan.com.vn/ban-nha-mat-pho',
+            'https://batdongsan.com.vn/ban-dat-nen-du-an',
+            'https://batdongsan.com.vn/ban-dat-nen-du-an',
+            'https://batdongsan.com.vn/ban-dat',
+            'https://batdongsan.com.vn/ban-trang-trai-khu-nghi-duong',
+            'https://batdongsan.com.vn/ban-kho-nha-xuong',
+            'https://batdongsan.com.vn/ban-loai-bat-dong-san-khac',
+
         ]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
