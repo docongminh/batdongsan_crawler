@@ -17,8 +17,8 @@ FEED_EXPORT_ENCODING = 'utf-8' # make output in json become human readable utf-8
 
 # limit for spider. Spider close when any limit reach
 # 0 is unlimit
-CLOSESPIDER_PAGECOUNT = 3 # limit the number of page crawl
-CLOSESPIDER_ITEMCOUNT = 100000 # limit number of item
+CLOSESPIDER_PAGECOUNT = 0 # limit the number of page crawl
+CLOSESPIDER_ITEMCOUNT = 1000 #100000 # limit number of item
 
 LOG_LEVEL = 'INFO' # write less log
 
@@ -40,8 +40,6 @@ DOWNLOAD_DELAY = 0.1
 CONCURRENT_REQUESTS_PER_DOMAIN = 32
 CONCURRENT_REQUESTS_PER_IP = 32
 
-# Disable cookies (enabled by default)
-COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
@@ -60,8 +58,22 @@ COOKIES_ENABLED = False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
+
+
+
+SPLASH_URL = 'http://127.0.0.1:8050'
+DUPEFILTER_CLASS = 'scrapy_splash.SplashAwareDupeFilter'
+HTTPCACHE_STORAGE = 'scrapy_splash.SplashAwareFSCacheStorage'
+# Disable cookies (enabled by default)
+COOKIES_ENABLED = False
+
+# SPIDER_MIDDLEWARES = {
+#     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+# }
 DOWNLOADER_MIDDLEWARES = {
     #'batdongsan.middlewares.MyCustomDownloaderMiddleware': 543,
+    # 'scrapy_splash.SplashCookiesMiddleware': 723,
+    # 'scrapy_splash.SplashMiddleware': 725,
     'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
     'random_useragent.RandomUserAgentMiddleware': 400
 }
