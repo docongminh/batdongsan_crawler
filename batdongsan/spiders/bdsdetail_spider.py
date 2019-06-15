@@ -11,7 +11,7 @@ class BdsDetailSpider(scrapy.Spider):
         urls = [
             #'https://batdongsan.com.vn/nha-dat-ban',
             'https://batdongsan.com.vn/ban-can-ho-chung-cu',
-            'https://batdongsan.com.vn/ban-nha-rieng',
+            # 'https://batdongsan.com.vn/ban-nha-rieng',
             # 'https://batdongsan.com.vn/ban-nha-biet-thu-lien-ke',
             # 'https://batdongsan.com.vn/ban-nha-mat-pho',
             # 'https://batdongsan.com.vn/ban-dat-nen-du-an',
@@ -71,7 +71,7 @@ class BdsDetailSpider(scrapy.Spider):
         #javascript protected 
         # email = customerInfo.xpath('//*[@id="contactEmail"]/div[2]/a/text()').extract()
         email = response.css('.divCustomerInfo').css('.right').css('a::attr(href)').extract_first()
-        print(email, "===========")
+        # print(email, "===========")
 
         item = response.request.meta['item']
         item['bodyDetail'] = body_detail.strip()
@@ -113,21 +113,24 @@ class BdsDetailSpider(scrapy.Spider):
         """
         
         """    
-
+        link_duplicate = []
         for item in response.css('.search-productItem'):
+            
             link = item.css('h3 a::attr(href)').extract_first()
-            itemCrawl = {
-                    'title': item.css('h3 a::attr(title)').extract_first(),
-                    'link': 'https://batdongsan.com.vn' + link,    
-                    'body': item.css('.p-main-text::text').extract_first(),
-                    'price': item.css('.product-price::text').extract_first(),
-                    'area': item.css('.product-area::text').extract_first(),
-                    'city': re.sub(r"(\r\n+)", '', item.css('.product-city-dist::text').extract_first()),
-                    # 'date': item.css('.mar-right-10::text').extract_first()
-                    }
+            if link not in link_duplicate:
+                link_duplicate.append(link)
+                itemCrawl = {
+                        'title': item.css('h3 a::attr(title)').extract_first(),
+                        'link': 'https://batdongsan.com.vn' + link,    
+                        'body': item.css('.p-main-text::text').extract_first(),
+                        'price': item.css('.product-price::text').extract_first(),
+                        'area': item.css('.product-area::text').extract_first(),
+                        'city': re.sub(r"(\r\n+)", '', item.css('.product-city-dist::text').extract_first()),
+                        # 'date': item.css('.mar-right-10::text').extract_first()
+                        }
 
-            yield response.follow(link, callback=self.parse_detail,
-                    meta={'item':itemCrawl}) # pass itemCrawl here to get more detail
+                yield response.follow(link, callback=self.parse_detail,
+                        meta={'item':itemCrawl}) # pass itemCrawl here to get more detail
 
         controller = response.css('.background-pager-right-controls').css('a')
         #print(controller, "controller")
